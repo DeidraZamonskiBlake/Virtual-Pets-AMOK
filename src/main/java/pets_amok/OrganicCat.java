@@ -26,7 +26,12 @@ public class OrganicCat extends OrganicPet implements Cat{
         return "Organic Cat";
     }
 
-    /** This method has a 33% chance to knock over the shelter litter box if the cat is feeling restless */
+    public OrganicCat(String petName, String petDescription) {
+        this.petName = petName;
+        this.petDescription = petDescription;
+    }
+
+    /** This method has a 33% chance to knock over the shelter litter box if the cat is feeling restless. */
     public void knockOverLitterBoxIfUnlucky(LitterBox litterBox) {
         if (this.isFeelingRestless) {
             double randomNumber = Math.random() * 11 + 1;
@@ -36,12 +41,21 @@ public class OrganicCat extends OrganicPet implements Cat{
         }
     }
 
-    /** This method has a 10% chance to make the cat feel restless */
+    /** This method has a 10% chance to make the cat feel restless. */
     public void makeRestlessIfUnlucky() {
         double randomNumber = Math.random() * 11 + 1;
         if (randomNumber > 8) {
             this.isFeelingRestless = true;
         }
+    }
+
+    /** This method has organic cats use the litter box if it us upright and if their bathroom stat is high enough. */
+    public void useLitterBox(LitterBox litterBox) {
+        if (this.bathroomStat > 75 && litterBox.isUpright()) {
+            this.bathroomStat = 0;
+            this.happinessLevel += 25;
+            litterBox.setWasteLevel(litterBox.getWasteLevel() + 30);
+        } else if (this.bathroomStat > 75 && !litterBox.isUpright()) this.happinessLevel -= 25;
     }
 
     /** This method is implemented from the Cat interface and it raises the happiness level of the organic cat by 10. */

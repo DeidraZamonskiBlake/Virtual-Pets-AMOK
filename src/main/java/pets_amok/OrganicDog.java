@@ -24,6 +24,12 @@ public class OrganicDog extends OrganicPet implements Dog {
         this.cage = new Cage();
     }
 
+    public OrganicDog(String petName, String petDescription) {
+        this.petName = petName;
+        this.petDescription = petDescription;
+        this.cage = new Cage();
+    }
+
     /** This constructor makes an organic dog from the virtual pet it takes in and generates a cage upon creation. */
     public OrganicDog(VirtualPet virtualPet) {
         this.cage = new Cage();
@@ -34,10 +40,11 @@ public class OrganicDog extends OrganicPet implements Dog {
         return "Organic Dog";
     }
 
-    /** This method is implemented from the Dog interface and it raises the happiness of the robotic dog to signify that the dog has been walked. */
+    /** This method is implemented from the Dog interface and it lowers the bathroom stat and raises the happiness of the robotic dog to signify that the dog has been walked. */
     @Override
     public boolean walkDog() {
         this.happinessLevel += 35;
+        this.bathroomStat -= 60;
         return true;
     }
 

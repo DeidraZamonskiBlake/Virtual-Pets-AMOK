@@ -37,6 +37,11 @@ public class RoboticCat extends RoboticPet implements Cat {
         return "Robotic Cat";
     }
 
+    public RoboticCat(String petName, String petDescription) {
+        this.petName = petName;
+        this.petDescription = petDescription;
+    }
+
     public boolean isDetectingThreats() {
         boolean isDetectingThreats = false;
         int potentialThreats = (int) Math.random() * 6 + 1;

@@ -18,6 +18,12 @@ public class RoboticDog extends RoboticPet implements Dog {
         this.cage = new Cage();
     }
 
+    public RoboticDog(String petName, String petDescription) {
+        this.petName = petName;
+        this.petDescription = petDescription;
+        this.cage = new Cage();
+    }
+
     /** This is the full arguments (except for the cage) constructor for a robotic dog and it generates a cage upon creation */
     public RoboticDog(int lubricantIntegrityLevel, int maintenanceIntegrityLevel, int batteryLevel, boolean isMalfunctioning) {
         super(lubricantIntegrityLevel, maintenanceIntegrityLevel, batteryLevel, isMalfunctioning);

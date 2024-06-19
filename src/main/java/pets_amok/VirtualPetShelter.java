@@ -84,7 +84,8 @@ private LitterBox litterBox;
             } else if (virtualPetType.equals("Organic Dog")) {
                 OrganicDog organicDog = new OrganicDog(virtualPet);
                 organicDog.giveWaterToPet();
-            }        }
+            }        
+        }
     }
 
     /**
@@ -92,15 +93,32 @@ private LitterBox litterBox;
      */
     public void increaseOrganicBaseStats() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
-            // Need to do
+            String virtualPetType = virtualPet.returnType();
+            if (virtualPetType.equals("Organic Cat")) {
+                OrganicCat organicCat = new OrganicCat(virtualPet);
+                organicCat.setHungerLevel(organicCat.getHungerLevel() + 9);
+                organicCat.setThirstLevel(organicCat.getThirstLevel() + 7);
+            } else if (virtualPetType.equals("Organic Dog")) {
+                OrganicDog organicDog = new OrganicDog(virtualPet);
+                organicDog.setHungerLevel(organicDog.getHungerLevel() + 11);
+                organicDog.setThirstLevel(organicDog.getThirstLevel() + 9);
+            }  
         }
     }
 
     /**
-     * This method runs the selfCare method for each pet in the shelter
+     * This method runs the selfCare method for each organic pet in the shelter
      */
-    public void allSelfCare() {
-        // Need to do
+    public void allOrganicsSelfCare() {
+        for (VirtualPet virtualPet : this.virtualPetsInShelter) {
+            if (virtualPet.returnType().equals("Organic Dog")) {
+                OrganicDog organicDog = new OrganicDog(virtualPet);
+                organicDog.selfCare();
+            } else if (virtualPet.returnType().equals("Organic Cat")) {
+                OrganicCat organicCat = new OrganicCat(virtualPet);
+                organicCat.selfCare();
+            }
+        }
     }
 
     /**
@@ -121,7 +139,22 @@ private LitterBox litterBox;
         ArrayList<VirtualPet> listOfDeadPets = new ArrayList<>();
 
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
-            
+            if (virtualPet.returnType().equals("Organic Dog")) {
+                OrganicDog organicDog = new OrganicDog(virtualPet);
+                if (organicDog.getHungerLevel() >= 100 || organicDog.getThirstLevel() >= 100) {
+                    listOfDeadPets.add(organicDog);
+                    virtualPetsInShelter.remove(organicDog);
+                }
+            } else if (virtualPet.returnType().equals("Organic Cat")) {
+                OrganicCat organicCat = new OrganicCat(virtualPet);
+                if (organicCat.getHungerLevel() >= 100 || organicCat.getThirstLevel() >= 100) {
+                    listOfDeadPets.add(organicCat);
+                    virtualPetsInShelter.remove(organicCat);
+                }
+            } else if (virtualPet.getHealthStat() <= 0) {
+                listOfDeadPets.add(virtualPet);
+                virtualPetsInShelter.remove(virtualPet);
+            }
         }
 
         return listOfDeadPets;
@@ -186,9 +219,7 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Cat")) {
                 OrganicCat organicCat = new OrganicCat(virtualPet);    
-                if (organicCat.getBathroomStat() > 75 && this.litterBox.isUpright()) {
-                    this.litterBox.setWasteLevel(this.litterBox.getWasteLevel() + 30);
-                } 
+                organicCat.useLitterBox(this.litterBox);
             }
         }
     }

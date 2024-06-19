@@ -21,9 +21,9 @@ public abstract class VirtualPet {
     /** Boredom status level of virtual pet */
     protected int boredomLevel;
     /** Happiness status level of virtual pet */
-    protected int happinessLevel;
+    protected int happinessLevel = 100;
     /** The health status of the virtual pet. */
-    protected int healthStat;
+    protected int healthStat = 100;
 
     /**
      * Constructor for the virtual pet object that takes in a pet name and description upon creation.

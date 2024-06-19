@@ -36,9 +36,7 @@ public abstract class OrganicPet extends VirtualPet {
     public void feedPet() {
         this.hungerLevel -= 45;
 
-        if (this.hungerLevel < 0) {
-            this.hungerLevel = 0;
-        }        
+        if (this.hungerLevel < 0) this.hungerLevel = 0;
     }
 
     /**
@@ -46,20 +44,14 @@ public abstract class OrganicPet extends VirtualPet {
      */
     public void giveWaterToPet() {
         this.thirstLevel -= 45;
-
-        if (this.thirstLevel < 0) {
-            this.thirstLevel = 0;
-        } 
+        if (this.thirstLevel < 0)this.thirstLevel = 0;
 
         this.healthStat += 35;
-
-        if (this.healthStat > 100) {
-            this.healthStat = 100;
-        }
+        if (this.healthStat > 100)this.healthStat = 100;
     }
 
     /**
-     * This method lowers the boredomLevel life stat of the virtual pet to represent the user playing with the pet
+     * This method lowers the boredomLevel life stat of the virtual pet
      */
     public void playWithPet() {
         this.boredomLevel -= 45;
@@ -73,7 +65,7 @@ public abstract class OrganicPet extends VirtualPet {
     }
 
     /**
-     * This method lowers the hungerLevel life stat of the virtual pet less than feedPet to represent the pet feeding itself
+     * This method lowers the hungerLevel life stat of the virtual pet less than feedPet
      */
     public void feedSelf() {
         this.hungerLevel -= 10;
@@ -81,7 +73,25 @@ public abstract class OrganicPet extends VirtualPet {
 
         this.healthStat += 15;
         if (this.healthStat > 100) this.healthStat = 100;
+    }
 
+    /**
+     * This method lowers the thirstLevel life stat of the virtual pet less than feedPet
+     */
+    public void getSelfWater() {
+        this.thirstLevel -= 7;
+        if (this.thirstLevel <= 0) this.thirstLevel = 0;
+    }
+
+    /** This method raises base stats of organic pets that can be directly manipulated */
+    public void selfCare() {
+        feedSelf();
+        getSelfWater();
+        entertainSelf();
+        if (this.bathroomStat > 50 && this.returnType().equals("Organic Dog")) {
+                this.bathroomStat -= 10;
+                // Would like to add a yard class that gets dirty when the dogs self-care poop and needs cleaned regularly
+        }
     }
 
     /**

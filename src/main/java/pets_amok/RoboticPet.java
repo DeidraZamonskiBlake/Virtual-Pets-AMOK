@@ -36,8 +36,9 @@ public abstract class RoboticPet extends VirtualPet {
         this.maintenanceIntegrityLevel = 100;
     }
 
+    /** This method makes the robotic pet malfunction if the battery drops too low */
     public void malfunctionIfBatteryLow() {
-        if (this.batteryLevel <= 15) this.isMalfunctioning = true;
+        if (this.batteryLevel < 10) this.isMalfunctioning = true;
     }
 
 }

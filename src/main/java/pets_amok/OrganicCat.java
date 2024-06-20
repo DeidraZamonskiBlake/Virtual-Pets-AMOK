@@ -17,10 +17,6 @@ public class OrganicCat extends OrganicPet implements Cat{
     /** This instance variable represents whether or not the cat is feeling restless. */
     private boolean isFeelingRestless = false;
 
-    /** This is a blank constructor that creates an organic cat object from a virtual pet object. */
-    public OrganicCat(VirtualPet virtualPet){
-    }
-
     /** This method returns a string containing the type of the calling object. */
     public String returnType() {
         return "Organic Cat";
@@ -54,7 +50,7 @@ public class OrganicCat extends OrganicPet implements Cat{
         if (this.bathroomStat > 75 && litterBox.isUpright()) {
             this.bathroomStat = 0;
             this.happinessLevel += 25;
-            litterBox.setWasteLevel(litterBox.getWasteLevel() + 30);
+            litterBox.setWasteLevel(litterBox.getWasteLevel() + 10);
         } else if (this.bathroomStat > 75 && !litterBox.isUpright()) this.happinessLevel -= 25;
     }
 

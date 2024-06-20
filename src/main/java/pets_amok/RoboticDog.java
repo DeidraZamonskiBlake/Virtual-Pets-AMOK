@@ -30,11 +30,6 @@ public class RoboticDog extends RoboticPet implements Dog {
         this.cage = new Cage();
     }
 
-    /** This constructor creates a robotic dog from a virtual pet and generates a cage upon creation */
-    public RoboticDog(VirtualPet virtualPet) {
-        this.cage = new Cage();
-    }
-
     /** This method returns a string containing the type of the calling object */
     public String returnType() {
         return "Robotic Dog";
@@ -43,7 +38,7 @@ public class RoboticDog extends RoboticPet implements Dog {
     /** This method is implemented from the Dog interface and it raises the happiness of the robotic dog to signify that the dog has been walked */
     @Override
     public boolean walkDog() {
-        this.happinessLevel += 35;
+        this.happinessLevel += 60;
         return true;
     }
 }

@@ -18,7 +18,7 @@ public abstract class RoboticPet extends VirtualPet {
     protected int oilLevel = 100;
 
     /** This instance variable represents the robots' need for regular maintenance. The lower it is, the higher the need for maintenance. */
-    protected int maintenanceIntegrityLevel = 100;
+    protected int maintenanceNeedLevel;
 
     /** This instance variable represents the battery level of the robotic pets */
     protected int batteryLevel = 100;
@@ -26,14 +26,14 @@ public abstract class RoboticPet extends VirtualPet {
     /** This instance variable represents whether or not the robotic pet is currently malfunctioning */
     protected boolean isMalfunctioning = false;
 
-    /** This method allows us to oil individual robotic pets */
+    /** This method resets the oil level of robotic pets back to 100 */
     public void oilPet() {
-        this.oilLevel += 30;
+        this.oilLevel = 100;
     }
 
-    /** This method resets the maintenance integrity level back to 100 */
+    /** This method resets the maintenance needed level of robotic pets back to 0 */
     public void performMaintenance() {
-        this.maintenanceIntegrityLevel = 100;
+        this.maintenanceNeedLevel = 0;
     }
 
     /** This method makes the robotic pet malfunction if the battery drops too low */

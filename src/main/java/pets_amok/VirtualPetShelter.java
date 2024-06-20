@@ -63,10 +63,10 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             String virtualPetType = virtualPet.returnType();
             if (virtualPetType.equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.feedPet();
             } else if (virtualPetType.equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 organicDog.feedPet();
             }
         }
@@ -79,10 +79,10 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             String virtualPetType = virtualPet.returnType();
             if (virtualPetType.equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.giveWaterToPet();
             } else if (virtualPetType.equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 organicDog.giveWaterToPet();
             }        
         }
@@ -95,11 +95,11 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             String virtualPetType = virtualPet.returnType();
             if (virtualPetType.equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.setHungerLevel(organicCat.getHungerLevel() + 9);
                 organicCat.setThirstLevel(organicCat.getThirstLevel() + 7);
             } else if (virtualPetType.equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 organicDog.setHungerLevel(organicDog.getHungerLevel() + 11);
                 organicDog.setThirstLevel(organicDog.getThirstLevel() + 9);
             }  
@@ -112,10 +112,10 @@ private LitterBox litterBox;
     public void allOrganicsSelfCare() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 organicDog.selfCare();
             } else if (virtualPet.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.selfCare();
             }
         }
@@ -140,13 +140,13 @@ private LitterBox litterBox;
 
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 if (organicDog.getHungerLevel() >= 100 || organicDog.getThirstLevel() >= 100) {
                     listOfDeadPets.add(organicDog);
                     virtualPetsInShelter.remove(organicDog);
                 }
             } else if (virtualPet.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 if (organicCat.getHungerLevel() >= 100 || organicCat.getThirstLevel() >= 100) {
                     listOfDeadPets.add(organicCat);
                     virtualPetsInShelter.remove(organicCat);
@@ -180,25 +180,20 @@ private LitterBox litterBox;
     public void walkAllDogs() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 organicDog.walkDog();
             } else if (virtualPet.returnType().equals("Robotic Dog")) {
-                RoboticDog robotDog = new RoboticDog(virtualPet);
+                RoboticDog robotDog = (RoboticDog) virtualPet;
                 robotDog.walkDog();
             }
         }
     }
 
-    /** This method takes in a robotic and adds it to the list of pets in the shelter signifying that it has bee repaired */
-    public void repairShortCircuitedCat(RoboticCat shortCircuitedRoboticCat) {
-        this.virtualPetsInShelter.add(shortCircuitedRoboticCat);
-    }
-
     /** This method has a 10% chance to make shelter cats feel restless. */
     public void makeCatsRestlessIfUnlucky() {
-        for (VirtualPet virtualPetInShelter : this.virtualPetsInShelter) {
-            if (virtualPetInShelter.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPetInShelter);
+        for (VirtualPet virtualPet : this.virtualPetsInShelter) {
+            if (virtualPet.returnType().equals("Organic Cat")) {
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.makeRestlessIfUnlucky();
             }
         }
@@ -208,7 +203,7 @@ private LitterBox litterBox;
     public void knockOverLitterBoxIfUnlucky() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.knockOverLitterBoxIfUnlucky(this.litterBox);
             }
         }
@@ -218,7 +213,7 @@ private LitterBox litterBox;
     public void catsUseLitterBoxIfNecessary() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet);    
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.useLitterBox(this.litterBox);
             }
         }
@@ -228,7 +223,7 @@ private LitterBox litterBox;
     public void cleanDogCages() {
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 Cage dogsCage = organicDog.getCage();
                 dogsCage.setWasteLevel(0);
                 organicDog.setHealthStat(organicDog.getHealthStat() + 30);
@@ -241,7 +236,7 @@ private LitterBox litterBox;
         this.litterBox.setWasteLevel(0);
         for (VirtualPet virtualPet : this.virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Cat")) {
-                OrganicCat organicCat = new OrganicCat(virtualPet); 
+                OrganicCat organicCat = (OrganicCat) virtualPet;
                 organicCat.setHealthStat(organicCat.getHealthStat() + 30);
             }
         }   
@@ -251,7 +246,7 @@ private LitterBox litterBox;
     public void decreaseHealthStatSoiledCage() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 Cage dogsCage = organicDog.getCage();
                 if (dogsCage.getWasteLevel() > 20) {
                     organicDog.setHealthStat(organicDog.getHealthStat() - 10);
@@ -278,13 +273,13 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().contains("Organic Cat")) {
             // Have to split these into organic cat and dog because organic pet is abstract
-            OrganicCat organicCat = new OrganicCat(virtualPet);
-                if (organicCat.hungerLevel > 75) organicCat.setHealthStat(organicCat.getHealthStat() - 15);
+            OrganicCat organicCat = (OrganicCat) virtualPet;
+            if (organicCat.hungerLevel > 75) organicCat.setHealthStat(organicCat.getHealthStat() - 15);
                 else if (organicCat.hungerLevel > 50) organicCat.setHealthStat(organicCat.getHealthStat() - 10);
                 if (organicCat.thirstLevel > 75) organicCat.setHealthStat(organicCat.getHealthStat() - 15);
                 else if (organicCat.thirstLevel > 50) organicCat.setHealthStat(organicCat.getHealthStat() - 10);
             } else if (virtualPet.returnType().contains("Organic Dog")) {
-                OrganicDog organicDog = new OrganicDog(virtualPet);
+                OrganicDog organicDog = (OrganicDog) virtualPet;
                 if (organicDog.hungerLevel > 75) organicDog.setHealthStat(organicDog.getHealthStat() - 15);
                 else if (organicDog.hungerLevel > 50) organicDog.setHealthStat(organicDog.getHealthStat() - 10);
                 if (organicDog.thirstLevel > 75) organicDog.setHealthStat(organicDog.getHealthStat() - 15);
@@ -299,28 +294,41 @@ private LitterBox litterBox;
             String virtualPetType = virtualPet.returnType();
             // Have to split these into robotic cat and dog because robotic pet is abstract
             if (virtualPetType.equals("Robotic Cat")) {
-                RoboticCat roboticCat = new RoboticCat(virtualPet);
+                RoboticCat roboticCat = (RoboticCat) virtualPet;
                 if (roboticCat.getOilLevel() > 75) roboticCat.setHealthStat(roboticCat.getHealthStat() - 30);
                 else if (roboticCat.getOilLevel() > 50) roboticCat.setHealthStat(roboticCat.getHealthStat() - 15);
             }
             if (virtualPetType.equals("Robotic Dog")) {
-                RoboticDog roboticDog = new RoboticDog(virtualPet);
+                RoboticDog roboticDog = (RoboticDog) virtualPet;
                 if (roboticDog.getOilLevel() > 75) roboticDog.setHealthStat(roboticDog.getHealthStat() - 30);
                 else if (roboticDog.getOilLevel() > 50) roboticDog.setHealthStat(roboticDog.getHealthStat() - 15);
             }
         }
     }
 
+        /** This method decreases the health of robotic pets if their maintenance need level is too high. */
+        public void decreaseHealthStatHighMaintenanceNeedLevel() {
+            for (VirtualPet virtualPet : virtualPetsInShelter) {
+                String virtualPetType = virtualPet.returnType();
+                // Have to split these into robotic cat and dog because robotic pet is abstract
+                if (virtualPetType.equals("Robotic Cat")) {
+                    RoboticCat roboticCat = (RoboticCat) virtualPet;
+                    if (roboticCat.maintenanceNeedLevel > 75) roboticCat.setHealthStat(roboticCat.healthStat - 30);
+                    else if (roboticCat.maintenanceNeedLevel > 50) roboticCat.setHealthStat(roboticCat.healthStat - 15);
+                }
+            }
+        }
+
     /** This method oils all robotic pets. */
     public void oilAllRoboticPets() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             String virtualPetType = virtualPet.returnType();
             if (virtualPetType.equals("Robotic Cat")) {
-                RoboticCat roboticCat = new RoboticCat(virtualPet);  
+                RoboticCat roboticCat = (RoboticCat) virtualPet;
                 roboticCat.oilPet();
             }
             if (virtualPetType.equals("Robotic Dog")) {
-                RoboticDog roboticDog = new RoboticDog(virtualPet);  
+                RoboticDog roboticDog = (RoboticDog) virtualPet;
                 roboticDog.oilPet();
             }
         }
@@ -331,7 +339,7 @@ private LitterBox litterBox;
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             String virtualPetType = virtualPet.returnType();
             if (virtualPetType.equals("Robotic Cat")) {
-                RoboticCat roboticCat = new RoboticCat(virtualPet);  
+                RoboticCat roboticCat = (RoboticCat) virtualPet;
                 if (roboticCat.isDetectingThreats()) {
                     ArrayList<VirtualPet> petsInShelter = this.virtualPetsInShelter;
                     petsInShelter.remove(roboticCat);
@@ -339,6 +347,21 @@ private LitterBox litterBox;
                         virtualPetAgain.setHappinessLevel(virtualPetAgain.getHappinessLevel() - 10);
                     }
                 }
+            }
+        }
+    }
+
+    /** This method resets the maintenance needed level of all robotic pets back to 0. */
+    public void performMaintenanceOnAllRoboticPets() {
+        for (VirtualPet virtualPet : virtualPetsInShelter) {
+            String virtualPetType = virtualPet.returnType();
+            if (virtualPetType.equals("Robotic Cat")) {
+                RoboticCat roboticCat = (RoboticCat) virtualPet;
+                roboticCat.performMaintenance();
+            }
+            if (virtualPetType.equals("Robotic Dog")) {
+                RoboticDog roboticDog = (RoboticDog) virtualPet;
+                roboticDog.performMaintenance();
             }
         }
     }

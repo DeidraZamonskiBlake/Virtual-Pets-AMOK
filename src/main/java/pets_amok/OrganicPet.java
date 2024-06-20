@@ -34,20 +34,22 @@ public abstract class OrganicPet extends VirtualPet {
      * This method lowers the hungerLevel life stat of the organic pet to represent the user feeding the pet
      */
     public void feedPet() {
-        this.hungerLevel -= 45;
-
+        this.hungerLevel -= 80;
         if (this.hungerLevel < 0) this.hungerLevel = 0;
+
+        this.healthStat += 35;
+        if (this.healthStat > 100) this.healthStat = 100;
     }
 
     /**
      * This method lowers the thirstLevel life stat of the virtual pet to represent the user giving water the pet
      */
     public void giveWaterToPet() {
-        this.thirstLevel -= 45;
-        if (this.thirstLevel < 0)this.thirstLevel = 0;
+        this.thirstLevel -= 80;
+        if (this.thirstLevel < 0) this.thirstLevel = 0;
 
         this.healthStat += 35;
-        if (this.healthStat > 100)this.healthStat = 100;
+        if (this.healthStat > 100) this.healthStat = 100;
     }
 
     /**

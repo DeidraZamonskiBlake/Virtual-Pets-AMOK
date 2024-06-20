@@ -28,10 +28,6 @@ public class RoboticCat extends RoboticPet implements Cat {
 
     private int threatDetectionPercentage;
 
-    /** A blank constructor for the robotic cat that takes in a virtual pet, */
-    public RoboticCat(VirtualPet virtualPet) {
-    }
-
     /** This method returns a string containing the type of the calling object, */
     public String returnType() {
         return "Robotic Cat";

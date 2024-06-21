@@ -36,9 +36,19 @@ public abstract class RoboticPet extends VirtualPet {
         this.maintenanceNeedLevel = 0;
     }
 
+    /** This method returns the robotic pet's battery level back to 100. */
+    public void rechargeBattery() {
+        this.batteryLevel = 100;
+    }
+
     /** This method makes the robotic pet malfunction if the battery drops too low */
     public void malfunctionIfBatteryLow() {
         if (this.batteryLevel < 10) this.isMalfunctioning = true;
+    }
+
+    /** This method changes the isMalfunctioning instance variable back to false. */
+    public void repairMalfunction() {
+        this.isMalfunctioning = false;
     }
 
 }

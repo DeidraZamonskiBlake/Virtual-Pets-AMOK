@@ -13,9 +13,21 @@ public class OrganicDog extends OrganicPet implements Dog {
     /** The cage object instance variable of each virtual dog */
     private Cage cage;
 
-    /** This constructor takes in full arguments (except for the cage) and generates a cage upon creation. */
-    public OrganicDog(int hungerLevel, int thirstLevel, int bathroomStat) {
+    /** This method represents whether or not the dog has been walked this tick. */
+    private boolean hasBeenWalkedThisTick;
+
+    /** This method represents whether or not the dog has been walked last tick. */
+    private boolean wasWalkedLastTick;
+
+
+    /** 
+     * @param
+     */
+    public OrganicDog(int hungerLevel, int thirstLevel, int bathroomStat, boolean hasBeenWalkedThisTick, boolean wasWalkedLastTick) {
         super(hungerLevel, thirstLevel, bathroomStat);
+        this.cage = new Cage();
+        this.hasBeenWalkedThisTick = hasBeenWalkedThisTick;
+        this.wasWalkedLastTick = wasWalkedLastTick;
         this.cage = new Cage();
     }
 
@@ -37,10 +49,12 @@ public class OrganicDog extends OrganicPet implements Dog {
 
     /** This method is implemented from the Dog interface and it lowers the bathroom stat and raises the happiness of the robotic dog to signify that the dog has been walked. */
     @Override
-    public boolean walkDog() {
+    public void walkDog() {
         this.happinessLevel += 50;
+        if (this.happinessLevel > 100) this.happinessLevel = 100;
         this.bathroomStat -= 80;
-        return true;
+        if (this.bathroomStat < 0) this.bathroomStat = 0;
+        this.hasBeenWalkedThisTick = true;
     }
 
     /** 
@@ -48,10 +62,10 @@ public class OrganicDog extends OrganicPet implements Dog {
      * It then generates a random number and decreases that number if the dog has been walked. 
      * Depending on the level of the bathroom stat and what the random number is, the waste level of the dog's cage will be increased.
      * */
-    public void soilCageIfUnlucky(boolean hasBeenWalked) {
+    public void soilCageIfUnlucky() {
         int randomNumber = (int) (Math.random() * 11) + 1;
 
-        if (hasBeenWalked) {
+        if (hasBeenWalkedThisTick || wasWalkedLastTick) {
             randomNumber -= 2;
         }
 

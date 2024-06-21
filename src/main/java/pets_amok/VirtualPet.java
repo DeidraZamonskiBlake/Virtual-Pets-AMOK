@@ -25,6 +25,8 @@ public abstract class VirtualPet {
     /** The health status of the virtual pet. */
     protected int healthStat = 100;
 
+    protected String causeOfDeath;
+
     /**
      * Constructor for the virtual pet object that takes in a pet name and description upon creation.
      * 
@@ -34,6 +36,20 @@ public abstract class VirtualPet {
     public VirtualPet(String petName, String petDescription) {
         this.petName = petName;
         this.petDescription = petDescription;
+    }
+
+    /**
+     * This method lowers the boredomLevel life stat of the virtual pet
+     */
+    public void playWithPet() {
+        this.boredomLevel -= 45;
+        if (this.boredomLevel < 0) this.boredomLevel = 0;
+
+        this.healthStat += 30;
+        if (this.healthStat > 100) this.healthStat = 100;
+
+        this.happinessLevel += 50;
+        if (this.happinessLevel > 100) this.happinessLevel = 100;
     }
 
     /**

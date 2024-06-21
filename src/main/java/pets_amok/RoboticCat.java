@@ -1,6 +1,8 @@
 package pets_amok;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,34 +28,39 @@ public class RoboticCat extends RoboticPet implements Cat {
      * If the cat is repaired but not charged, user can only interact with the cat by charging it
      */
 
-    private int threatDetectionPercentage;
+    /** This instance variable represents whether or not the robotic cat is detecting threats. */
+    private boolean isDetectingThreats = false;
+
+    private boolean hasThreatAlarmOn = false;
 
     /** This method returns a string containing the type of the calling object, */
     public String returnType() {
         return "Robotic Cat";
     }
 
+    /** This is a constructor for the robotic cat object that takes in a pet name and description. */
     public RoboticCat(String petName, String petDescription) {
         this.petName = petName;
         this.petDescription = petDescription;
     }
 
-    public boolean isDetectingThreats() {
-        boolean isDetectingThreats = false;
-        int potentialThreats = (int) Math.random() * 6 + 1;
+    /** This method determines whether or not the cat is detecting threats, which is greatly influenced by whether or not it is malfunctioning. */
+    public boolean determineIfCatIsDetectingThreats() {
+        Random randomizer = new Random();
+        int potentialThreats = randomizer.nextInt(1, 6);
 
         if (this.isMalfunctioning) {
-            threatDetectionPercentage = (int) (Math.random() * 26 + 50) + 2;
+            int threatDetectionPercentage = randomizer.nextInt(10, 21);
             for (int counter = 0; counter < potentialThreats; counter++) {
-                int randomNumber = (int) Math.random() * 101 + 1;
+                int randomNumber = randomizer.nextInt(1, 101);
                 if (randomNumber <= threatDetectionPercentage) {
                     isDetectingThreats = true;
                 } else isDetectingThreats = false;
             }
         } else {
-            threatDetectionPercentage = 2;
+            int threatDetectionPercentage = 2;
             for (int counter = 0; counter < potentialThreats; counter++) {
-                int randomNumber = (int) Math.random() * 101 + 1;
+                int randomNumber = randomizer.nextInt(1, 101);
                 if (randomNumber <= threatDetectionPercentage) {
                     isDetectingThreats = true;
                 } else isDetectingThreats = false;
@@ -63,12 +70,11 @@ public class RoboticCat extends RoboticPet implements Cat {
         return isDetectingThreats;
     }
 
-    public void terrorizeOtherPets(ArrayList<VirtualPet> virtualPetsInShelter) {
-        int levelOfTerror = (int) Math.random() * 4 + 1;
-        virtualPetsInShelter.remove(this);
-        for (VirtualPet virtualPet : virtualPetsInShelter) {
-            virtualPet.setHappinessLevel(virtualPet.getHappinessLevel() - (levelOfTerror * 10));
-        }
+    /** This method has the cat sound an alarm that slight annoys the rest of the pets in the shelter; */
+    public void soundAlarm(ArrayList<VirtualPet> virtualPetsInShelter) {
+        for (VirtualPet virtualPet : virtualPetsInShelter) virtualPet.happinessLevel -= 7;
+        this.happinessLevel += 7;
+        this.hasThreatAlarmOn = true;
     }
 
     /** This method is implemented from the Cat interface and it raises the happiness level of the robotic cat by 5. */
@@ -85,11 +91,19 @@ public class RoboticCat extends RoboticPet implements Cat {
 
     /** This method is implemented from the Cat interface and depending on the happiness level of the cat, the cat will call either the hiss or purr method. */
     @Override
-    public void petCat() {
+    public String petCat() {
         if (this.happinessLevel >= 70) {
             this.purr();
+            return "purr";
         } else {
             this.hiss();
+            return "hiss";
         }
+    }
+
+    /** This method changes the isDetectingThreats and the hasThreatAlarmOn instance variables back to false. */
+    public void handleDetectedThreats() {
+        this.isDetectingThreats = false;
+        this.hasThreatAlarmOn = false;
     }
 }

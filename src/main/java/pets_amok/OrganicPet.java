@@ -37,6 +37,9 @@ public abstract class OrganicPet extends VirtualPet {
         this.hungerLevel -= 80;
         if (this.hungerLevel < 0) this.hungerLevel = 0;
 
+        this.bathroomStat += 7;
+        if (this.bathroomStat > 100) this.bathroomStat = 100;
+
         this.healthStat += 35;
         if (this.healthStat > 100) this.healthStat = 100;
     }
@@ -48,22 +51,11 @@ public abstract class OrganicPet extends VirtualPet {
         this.thirstLevel -= 80;
         if (this.thirstLevel < 0) this.thirstLevel = 0;
 
+        this.bathroomStat += 4;
+        if (this.bathroomStat > 100) this.bathroomStat = 100;
+
         this.healthStat += 35;
         if (this.healthStat > 100) this.healthStat = 100;
-    }
-
-    /**
-     * This method lowers the boredomLevel life stat of the virtual pet
-     */
-    public void playWithPet() {
-        this.boredomLevel -= 45;
-        if (this.boredomLevel < 0) this.boredomLevel = 0;
-
-        this.healthStat += 30;
-        if (this.healthStat > 100) this.healthStat = 100;
-
-        this.happinessLevel += 50;
-        if (this.happinessLevel > 100) this.happinessLevel = 100;
     }
 
     /**
@@ -72,6 +64,9 @@ public abstract class OrganicPet extends VirtualPet {
     public void feedSelf() {
         this.hungerLevel -= 10;
         if (this.hungerLevel < 0) this.hungerLevel = 0;
+
+        this.bathroomStat += 3;
+        if (this.bathroomStat > 100) this.bathroomStat = 100;
 
         this.healthStat += 15;
         if (this.healthStat > 100) this.healthStat = 100;
@@ -83,6 +78,12 @@ public abstract class OrganicPet extends VirtualPet {
     public void getSelfWater() {
         this.thirstLevel -= 7;
         if (this.thirstLevel <= 0) this.thirstLevel = 0;
+
+        this.bathroomStat += 2;
+        if (this.bathroomStat > 100) this.bathroomStat = 100;
+
+        this.healthStat += 15;
+        if (this.healthStat > 100) this.healthStat = 100;
     }
 
     /** This method raises base stats of organic pets that can be directly manipulated */
@@ -90,10 +91,7 @@ public abstract class OrganicPet extends VirtualPet {
         feedSelf();
         getSelfWater();
         entertainSelf();
-        if (this.bathroomStat > 50 && this.returnType().equals("Organic Dog")) {
-                this.bathroomStat -= 10;
-                // Would like to add a yard class that gets dirty when the dogs self-care poop and needs cleaned regularly
-        }
+        if (this.bathroomStat > 50 && this.returnType().equals("Organic Dog")) this.bathroomStat -= 10;
     }
 
     /**

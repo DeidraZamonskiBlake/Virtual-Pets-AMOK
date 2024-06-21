@@ -3,8 +3,6 @@ package pets_amok;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.sound.midi.Soundbank;
-
 /**
  * This class represents the main program for our Virtual Pets Amok app. Contains the main method for user interaction.
  * 
@@ -18,6 +16,8 @@ public class Application {
 
     /** This instance variable represents the list of virtual pets in the shelter */
     private static ArrayList<VirtualPet> virtualPetsInShelter;
+
+    private static ArrayList<VirtualPet> deadPets;
 
     /** This is the scanner instance variable of the main app */
     private static Scanner scanner;
@@ -51,6 +51,19 @@ public class Application {
 
         System.out.println();
         System.out.println("Animal Shelter Manager App\n");
+
+        runMainMenu();
+        System.out.println();
+        scanner.close();
+
+        // update jocdoc so that methods have multiline comments
+
+    }
+
+    /**
+     * This method prints all of the display lists and stats of the program.
+     */
+    private static void printListsAndStats() {
         listAllOrganicPetsStats();
 
         System.out.println();
@@ -60,9 +73,12 @@ public class Application {
 
         System.out.println();
         listCleanlinessOfLitterBox();
-        // print litter box position
+        printLitterBoxPosition();
 
         System.out.println();
+        listRestlessCats();
+        printThreatDetectionStatus();
+
         System.out.println();
         System.out.println();
 
@@ -72,111 +88,293 @@ public class Application {
         System.out.println();
         System.out.println();
 
-        // print Main Menu
-        printMainMenu();
-        int usersSelection = scanner.nextInt();
-        scanner.nextLine();
-        runUsersSelection(usersSelection);
-
-        System.out.println();
-        scanner.close();
-
-        // give main menu functionality
-        // add repair malfunctioned robot function for robots under individual interaction
-
-        /*
-         * Inside main tick method:
-         * increaseOrganicBaseStats
-         * increaseEveryone'sBoredom
-         * increaseBathroomStat
-         * decreaseBatteryLevel
-         * decreaseLubricantIntegrityLevel
-         * decreaseMaintenanceIntegrityLevel
-         * checkForThreats
-         * makeCatsRestlessIfUnlucky
-         * soilCageIfUnlucky
-         * catsUseLitterBoxIfNecessary
-         * knockOverLitterBoxIfUnlucky
-         * decreaseHealthStatSoiledCage
-         * decreaseHealthStatFullLitterBox
-         * decreaseHealthStatLowHungerThirst
-         * decreaseHealthStatLowOilLevel
-         * decreaseHealthStatHighMaintenanceNeedLevel
-         * decreaseHealthStatIsMalfunctioning
-         * socializeAllPets
-         * allOrganicsSelfCare
-         * checkForDeadPets
-         * removeDeadPets
-         */
-
-        // How will we handle checking if the dog has been walked this tick and last tick?
-        // boolean walkedDogLastTick = false at the beginning outside of loop
-        // boolean walkedDogThisTick = false at the beginning inside of loop
-        /*
-         * If user presses the walk dog key {
-         *      walkedDogThisTick = hasWalkedDog
-         *      boolean walkedDogLastTick = true
-         *  }
-         * 
-         * make walkedDogThisTick false before loop ends
-         *  
-         */
-
-         // Make bathroomStat increase when organic pets eat or drink
-
-        /*
-         * Add cleanliness stat to the shelter that goes up if the litter box is tipped over; 
-         * Increases by the waste level the litter box was at
-         * It also increases when dog's cages reach their cleanliness limit
-         * It's increased by the soil overflow amount
-         * Has a higher waste limit than litter boxes and cages
-         * Add the ability to clean the shelter
-         * If the shelter reaches the cleanliness limit, all pets are removed by the humane society
-         */
-
-         // Add a method that has pets run away if happiness reaches 0
+        listMalfunctioningCats();
     }
 
-    // System.out.println("1: Feed Organic Pets");
-    // System.out.println("2: Give Organic Pets Water");
-    // System.out.println("3: Oil Robotic Pets");
-    // System.out.println("4: Perform Maintenance on All Robotic Pets");
-    // System.out.println("5: Walk All Dogs");
-    // System.out.println("6: Interact With Individual Pet");
-    // System.out.println("7: Clean All Cages");
-    // System.out.println("8: Empty Litter Box");
-    // System.out.println("9: Set Litter Box Upright");
-    // System.out.println("10: Take In Homeless Pet");
-    // System.out.println("11: Allow a Pet to Be Adopted");
-    // System.out.println("12: Exit"); 
+    /**
+     * This method prints a list of dead pets, if there are any, and their cause of death.
+     */
+    private static void printIfAnyPetsDied() {
+        System.out.println();
+        if (deadPets.size() > 0) {
+            for (VirtualPet deadPet : deadPets) System.out.println(deadPet.petName + " has died from " + deadPet.getCauseOfDeath() + "!");
+        }
+        System.out.println();
+    }
 
-    private static void runUsersSelection(int usersSelection) {
-        switch (usersSelection) {
+    /**
+     * This method prints out all restless cats in list form.
+     */
+    private static void listRestlessCats() {
+        ArrayList<OrganicCat> restlessCats = shelterForPets.listRestlessCats();
+        int i = 1;
+        if (restlessCats.size() > 0) {
+            System.out.println();
+            System.out.println("Restless Cats - These cats knock over the litter box, making it unusable for all shelter cats. Soothe them to make them feel better!");
+            for (OrganicCat restlessCat : restlessCats) {
+                System.out.println(" " + i + ": " + restlessCat.petName);
+                i++;
+            }
+        }
+    }
+
+    /**
+     * This method prints all malfunctioning robotic cats in list form.
+     */
+    private static void listMalfunctioningCats() {
+        ArrayList<VirtualPet> malfunctioningCats = shelterForPets.listMalfunctioningCats();
+        if (malfunctioningCats.size() > 0) {
+            System.out.println("Malfunctioning Robotic Cats - These cats will detect an unnaturally high number number of threats. Repair them to correct their accuracy!");
+            int i = 1;
+            for (VirtualPet malfunctioningCat : malfunctioningCats) {
+                System.out.println(" " + i + ": " + malfunctioningCat.petName);
+                i++;
+            }
+        }
+        
+    }
+
+    /** 
+     * This method prints the status of whether any cats are detecting threats and list the cats who are detecting threats if there are any.
+     */
+    private static void printThreatDetectionStatus() {
+        if (shelterForPets.listCatsDetectingThreats().size() > 0) {
+            System.out.println();
+            System.out.println();
+            System.out.print("Threat Detection Alarm Status: ON");
+            System.out.println();
+            System.out.println("Cats Detecting Threats - These cats will sound their threat alarm if they detect threats. The alarm annoys the other animals in the shelter. Handle their threats to turn off their alarm!");
+            ArrayList<RoboticCat> catsDetectingThreats = shelterForPets.listCatsDetectingThreats();
+            int i = 1;
+            for (RoboticCat roboticCat : catsDetectingThreats) {
+                System.out.println(" " + i + ": " + roboticCat.petName);
+                i++;
+            }
+        } else {
+            System.out.println();
+            System.out.println();
+            System.out.println("Threat Detection Alarm Status: OFF");
+        }
+    }
+
+    /** 
+     * This method prints the current position of the shelter litter box.
+     */
+    private static void printLitterBoxPosition() {
+        System.out.println();
+        System.out.print("Litter Box Position: ");
+        LitterBox litterBox = shelterForPets.getLitterBox();
+        if (litterBox.isUpright()) System.out.print(" Upright");
+        else System.out.print("Fallen\nSet litter box upright so the cats can use it again!");
+
+    }
+
+    /** 
+     * This method prints the output for interacting with an individual pet based on the pets category.
+     */
+    private static void interactWithPet(VirtualPet selectedPet) {
+        if (selectedPet.returnType().equals("Organic Cat")) {
+            OrganicCat organicCat = (OrganicCat) selectedPet;
+            interactWithOrganicCat(organicCat);
+        } else if (selectedPet.returnType().equals("Organic Dog")) {
+            OrganicDog organicDog = (OrganicDog) selectedPet;
+            interactWithOrganicDog(organicDog);
+        } else if (selectedPet.returnType().equals("Robotic Cat")) {
+            RoboticCat roboticCat = (RoboticCat) selectedPet;
+            interactWithRoboticCat(roboticCat);
+        } else {
+            RoboticDog roboticDog = (RoboticDog) selectedPet;
+            interactWithRoboticDog(roboticDog);
+        }
+    }
+
+    /** 
+     * This method prints the interaction menu for robotic dogs.
+     */
+    private static void interactWithRoboticDog(RoboticDog roboticDog) {
+        String dogName = roboticDog.petName;
+        System.out.println(dogName + " is an robotic dog. What would you like to do with this pet?");
+        System.out.println("1: Recharge Dog's Battery");
+        System.out.println("2: Give Dog Oil");
+        System.out.println("3: Perform Maintenance on Dog");
+        System.out.println("4: Play With Dog");
+        System.out.println("5: Repair Dog's Malfunction");
+        System.out.println("6: Walk Dog");
+        System.out.println("7: Allow Adoption");
+        System.out.println();
+        System.out.println("Enter a number to make a selection:");
+        int usersRoboticDogInteractionSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (usersRoboticDogInteractionSelection) {
             case 1:
-                shelterForPets.feedAllOrganicPetsInShelter();
+                roboticDog.rechargeBattery();
                 break;
             case 2:
-                shelterForPets.giveAllOrganicPetsInShelterWater();
+                roboticDog.oilPet();
                 break;
-            case 3: 
-                shelterForPets.oilAllRoboticPets();
+            case 3:
+                roboticDog.performMaintenance();
                 break;
             case 4:
-                shelterForPets.performMaintenanceOnAllRoboticPets();
+                roboticDog.playWithPet();
                 break;
             case 5:
-                shelterForPets.walkAllDogs();
+                roboticDog.repairMalfunction();
                 break;
             case 6:
-                runCase6();
+                roboticDog.walkDog();
+                break;
+            case 7:
+                shelterForPets.allowHomelessPetAdoption(roboticDog);
+                System.out.println();
+                System.out.println(roboticDog.petName + " has been adopted!");
             default:
                 System.out.println("You have entered an invalid response, please try again.");
         }
     }
 
-    private static void runCase6() {
+    /** 
+     * This method prints the interaction menu for robotic cats.
+     */
+    private static void interactWithRoboticCat(RoboticCat roboticCat) {
+        String catName = roboticCat.petName;
+        System.out.println(catName + " is an robotic cat. What would you like to do with this pet?");
+        System.out.println("1: Recharge Cat's Battery");
+        System.out.println("2: Give Cat Oil");
+        System.out.println("3: Perform Maintenance on Cat");
+        System.out.println("4: Play With Cat");
+        System.out.println("5: Repair Cat's Malfunction");
+        System.out.println("6: Handle Cat's Detected Threats");
+        System.out.println("7: Allow Adoption");
+        System.out.println();
+        System.out.println("Enter a number to make a selection:");
+        int usersRoboticCatInteractionSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (usersRoboticCatInteractionSelection) {
+            case 1:
+                roboticCat.rechargeBattery();
+                break;
+            case 2:
+                roboticCat.oilPet();
+                break;
+            case 3:
+                roboticCat.performMaintenance();
+                break;
+            case 4:
+                roboticCat.repairMalfunction();
+                break;
+            case 5:
+                roboticCat.handleDetectedThreats();
+                break;
+            case 6:
+                shelterForPets.allowHomelessPetAdoption(roboticCat);
+                System.out.println();
+                System.out.println(roboticCat.petName + " has been adopted!");
+                break;
+            default:
+                System.out.println("You have entered an invalid response, please try again.");
+        }
+    }
+
+        /** 
+         * This method prints output for the interactions specific to the organic dog.
+         */
+        private static void interactWithOrganicDog(OrganicDog organicDog) {
+            String dogName = organicDog.petName;
+            System.out.println(dogName + " is an organic dog. What would you like to do with this pet?");
+            System.out.println("1: Feed Dog");
+            System.out.println("2: Give Dog Water");
+            System.out.println("3: Play With Dog");
+            System.out.println("4: Walk Dog");
+            System.out.println("5: Clean Dog Cage");
+            System.out.println("6: Allow Adoption");
+            System.out.println();
+            System.out.println("Enter a number to make a selection:");
+            int usersOrganicDogInteractionSelection = scanner.nextInt();
+            scanner.nextLine();
+    
+            switch (usersOrganicDogInteractionSelection) {
+                case 1:
+                    organicDog.feedPet();
+                    break;
+                case 2:
+                    organicDog.giveWaterToPet();
+                    break;
+                case 3:
+                    organicDog.playWithPet();
+                    break;
+                case 4:
+                    organicDog.walkDog();
+                    break;
+                case 5:
+                    Cage cage = organicDog.getCage();
+                    cage.setWasteLevel(0);
+                    break;
+                case 6:
+                    shelterForPets.allowHomelessPetAdoption(organicDog);
+                    System.out.println();
+                    System.out.println(organicDog.petName + " has been adopted!");
+                    break;
+                default:
+                    System.out.println("You have entered an invalid response, please try again.");
+            }
+        }
+
+    /** 
+     * This method prints output for the interactions specific to the organic cat.
+     */
+    private static void interactWithOrganicCat(OrganicCat organicCat) {
+        String catName = organicCat.petName;
+        System.out.println(catName + " is an organic cat. What would you like to do with this pet?");
+        System.out.println("1: Feed Cat");
+        System.out.println("2: Give Cat Water");
+        System.out.println("3: Play With Cat");
+        System.out.println("4: Pet Cat");
+        System.out.println("5: Soothe Cat");
+        System.out.println("6: Allow Adoption");
+        System.out.println();
+        System.out.println("Enter a number to make a selection:");
+        int usersOrganicCatInteractionSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (usersOrganicCatInteractionSelection) {
+            case 1:
+                organicCat.feedPet();
+                break;
+            case 2:
+                organicCat.giveWaterToPet();
+                break;
+            case 3:
+                organicCat.playWithPet();
+                break;
+            case 4:
+                System.out.println();
+                if (organicCat.petCat().equals("purr")) System.out.println(catName + " purred.");
+                else System.out.println(catName + " hissed at you!");
+                break;
+            case 5:
+                organicCat.sootheCat();
+                System.out.println();
+                System.out.println(organicCat.petName + " has been soothed.");
+            case 6:
+                shelterForPets.allowHomelessPetAdoption(organicCat);
+                System.out.println();
+                System.out.println(organicCat.petName + " has been adopted!");
+                break;
+            default:
+                System.out.println("You have entered an invalid response, please try again.");
+        }
+    }
+
+    /** 
+     * This method prints the names of all pets in the shelter on a list.
+     */
+    private static void printAllPetNames() {
         System.out.println();
         System.out.println("Pets in Shelter");
+
         int i = 1; 
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             System.out.println(i + ": " + virtualPet.petName);
@@ -184,25 +382,232 @@ public class Application {
         }
     }
 
-    /** This method prints the main menu output. */
-    private static void printMainMenu() {
-        System.out.println("1: Feed Organic Pets");
-        System.out.println("2: Give Organic Pets Water");
-        System.out.println("3: Oil Robotic Pets");
-        System.out.println("4: Perform Maintenance on All Robotic Pets");
-        System.out.println("5: Walk All Dogs");
-        System.out.println("6: Interact With Individual Pet");
-        System.out.println("7: Clean All Cages");
-        System.out.println("8: Empty Litter Box");
-        System.out.println("9: Set Litter Box Upright");
-        System.out.println("10: Take In Homeless Pet");
-        System.out.println("11: Allow a Pet to Be Adopted");
-        System.out.println("12: Exit"); 
+    /**
+     * This method prints the output for selecting a pet from the shelter.
+     * @return virtual pet selected from shelter by user
+     */
+    private static VirtualPet selectAPetFromShelter() {
+        printAllPetNames();
         System.out.println();
+        System.out.println("Which pet would you like to interact with?");
         System.out.println("Enter a number to make a selection:");
+        int usersPetSelection = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
+
+        return virtualPetsInShelter.get(usersPetSelection - 1);
+    } 
+
+    /** 
+     * This method prints the main menu output. 
+    */
+    private static void runMainMenu() {
+        while (true) {
+            shelterForPets.tick();
+            deadPets = shelterForPets.listDeadPets();
+            removeDeadPetsFromShelterListIfAny();
+            printIfAnyPetsDied();
+            printListsAndStats();
+
+            System.out.println("1: Feed Organic Pets");
+            System.out.println("2: Give Organic Pets Water");
+            System.out.println("3: Play With All Pets");
+            System.out.println("4: Oil Robotic Pets");
+            System.out.println("5: Pet All Cats");
+            System.out.println("6: Perform Maintenance on All Robotic Pets");
+            System.out.println("7: Recharge All Robotic Pets");
+            System.out.println("8: Walk All Dogs");
+            System.out.println("9: Soothe All Restless Cats");
+            System.out.println("10: Repair All Malfunctioned Robots");
+            System.out.println("11: Handle All Detected Threats");
+            System.out.println("12: Interact With Individual Pet");
+            System.out.println("13: Clean All Cages");
+            System.out.println("14: Empty Litter Box");
+            System.out.println("15: Set Litter Box Upright");
+            System.out.println("16: Take In Homeless Pet");
+            System.out.println("17: Allow a Pet to Be Adopted");
+            System.out.println("18: Exit"); 
+            System.out.println();
+            System.out.println("Enter a number to make a selection:");
+            int usersSelection = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (usersSelection) {
+                case 1:
+                    shelterForPets.feedAllOrganicPetsInShelter();
+                    break;
+                case 2:
+                    shelterForPets.giveAllOrganicPetsInShelterWater();
+                    break;
+                case 3: 
+                    shelterForPets.playWithAllPets();
+                    break;
+                case 4: 
+                    shelterForPets.oilAllRoboticPets();
+                    break;
+                case 5:
+                    shelterForPets.petAllCats();
+                    break;
+                case 6:
+                    shelterForPets.performMaintenanceOnAllRoboticPets();
+                    break;
+                case 7:
+                    shelterForPets.rechargeAllRobots();
+                    break;
+                case 8:
+                    shelterForPets.walkAllDogs();
+                    break;
+                case 9:
+                    shelterForPets.sootheAllRestlessCats();
+                    break;
+                case 10:
+                    shelterForPets.repairAllMalfunctionedRobots();
+                    break;
+                case 11: 
+                    shelterForPets.handleAllDetectedThreats();
+                    break;
+                case 12:
+                    interactWithPet(selectAPetFromShelter());
+                    break;
+                case 13:
+                    shelterForPets.cleanAllDogCages();
+                    break;
+                case 14:
+                    shelterForPets.emptyLitterBox();
+                    break;
+                case 15:
+                    shelterForPets.setLitterBoxUpright();
+                    break;
+                case 16:
+                    printTakeInHomelessPet();
+                    break;
+                case 17:
+                    printAllowPetAdoption();
+                    break;
+                case 18:
+                    System.exit(0);
+                default:
+                    System.out.println("You have entered an invalid response, please try again.");
+            }
+
+            System.out.println();
+            shelterForPets.tick();
+        }
     }
 
-    /** This method prints the waste level of the litter box. */
+    /**
+     * This method removes dead pets from the list of pets in the shelter if there are any.
+     */
+    private static void removeDeadPetsFromShelterListIfAny() {
+        ArrayList<VirtualPet> listOfDeadPets = shelterForPets.listDeadPets();
+
+        for (VirtualPet deadPet : listOfDeadPets) {
+            virtualPetsInShelter.remove(deadPet);
+        }
+    }
+
+    /** 
+     * This method prints the output for allowing a pet to be adopted out of the shelter.
+     */
+    private static void printAllowPetAdoption() {
+        printAllPetNames();
+        System.out.println();
+        System.out.println("Which pet would you like to allow to be adopted?");
+        int usersPetSelection = scanner.nextInt();
+
+        VirtualPet adoptedPet = virtualPetsInShelter.get(usersPetSelection - 1);
+        shelterForPets.allowHomelessPetAdoption(adoptedPet);
+
+        System.out.println();
+        System.out.println(adoptedPet.petName + " has been adopted!");
+        System.out.println();
+    }
+
+    /** 
+     * This method prints the output for taking a new homeless in to the shelter.
+     */
+    private static void printTakeInHomelessPet() {
+        System.out.println();
+        System.out.println("This shelter cares for four different kinds of pets:");
+        System.out.println("1: Organic Cats");
+        System.out.println("2: Organic Dogs");
+        System.out.println("3: Robotic Cats");
+        System.out.println("4: Robotic Dogs");
+        System.out.println();
+        System.out.println("Which type of pet would like to take in?");
+        System.out.println("Enter a number to make a selection:");
+        int usersNewPetSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (usersNewPetSelection) {
+            case 1:
+                System.out.println();
+                System.out.println("What is the name of the new organic cat?");
+                String newCatName = scanner.nextLine();
+
+                System.out.println();
+                System.out.println("What is the description of the new cat?");
+                String newCatDescription = scanner.nextLine();
+
+                OrganicCat organicCat = new OrganicCat(newCatName, newCatDescription);
+                shelterForPets.takeInHomelessPet(organicCat);
+
+                System.out.println();
+                System.out.println(organicCat.petName + " has been added to the shelter!");
+                break;
+            case 2:
+                System.out.println();
+                System.out.println("What is the name of the new organic dog?");
+                String newDogName = scanner.nextLine();
+
+                System.out.println();
+                System.out.println("What is the description of the new dog?");
+                String newDogDescription = scanner.nextLine();
+
+                OrganicDog organicDog = new OrganicDog(newDogName, newDogDescription);
+                shelterForPets.takeInHomelessPet(organicDog);
+
+                System.out.println();
+                System.out.println(organicDog.petName + " has been added to the shelter!");
+                break;
+            case 3:
+                System.out.println();
+                System.out.println("What is the name of the new robotic cat?");
+                String newRobotCatName = scanner.nextLine();
+
+                System.out.println();
+                System.out.println("What is the description of the new cat?");
+                String newRobotCatDescription = scanner.nextLine();
+
+                RoboticCat roboticCat = new RoboticCat(newRobotCatName, newRobotCatDescription);
+                shelterForPets.takeInHomelessPet(roboticCat);
+
+                System.out.println();
+                System.out.println(roboticCat.petName + " has been added to the shelter!");
+                break;
+            case 4:
+                System.out.println();
+                System.out.println("What is the name of the new robotic dog?");
+                String newRobotDogName = scanner.nextLine();
+
+                System.out.println();
+                System.out.println("What is the description of the new dog?");
+                String newRobotDogDescription = scanner.nextLine();
+
+                RoboticDog roboticDog = new RoboticDog(newRobotDogName, newRobotDogDescription);
+                shelterForPets.takeInHomelessPet(roboticDog);
+
+                System.out.println();
+                System.out.println(roboticDog.petName + " has been added to the shelter!");
+                break;
+            default:
+            System.out.println("You have entered an invalid response, please try again.");
+        }
+    }
+
+    /** 
+     * This method prints the waste level of the litter box.
+     */
     private static void listCleanlinessOfLitterBox() {
         LitterBox litterBox = shelterForPets.getLitterBox();
 
@@ -210,13 +615,17 @@ public class Application {
         System.out.print("Litter Box Waste Level: " + litterBox.getWasteLevel());
     }
 
-    /** This method lists the waste level of each organic dog's cage underneath a header. */
+    /** 
+     * This method lists the waste level of each organic dog's cage underneath a header.
+     */
     private static void listCleanlinessOfCages() {
         printCleanlinessOfCagesHeader();
         listCagesStat();
     }
 
-    /** This method prints the waste level of each organic dogs cage. */
+    /** 
+     * This method prints the waste level of each organic dogs cage.
+     */
     private static void listCagesStat() {
         System.out.println();
         for (VirtualPet virtualPet : virtualPetsInShelter) {
@@ -234,35 +643,46 @@ public class Application {
         
     }
 
-    /** This method prints the header for the list od organic dog cages. */
+    /** 
+     * This method prints the header for the list od organic dog cages.
+     */
     private static void printCleanlinessOfCagesHeader() {
         System.out.print("Cage Owner |  Waste Level");
         System.out.println();
         for (int i = 0; i < 26; i++) System.out.print("-");
     }
 
-    /** This method prints a list of all robotic pets underneath a header. */
+    /** 
+     * This method prints a list of all robotic pets underneath a header.
+     */
     private static void listAllRoboticPetsStats() {
         printRoboticPetListHeader();
         listRoboticCatsStats();
         listRoboticDogStats();
     }
 
-    /** This method prints a list of robotic dogs and their stats. */
+    /** 
+     * This method prints a list of robotic dogs and their stats.
+     */
     private static void listRoboticDogStats() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Robotic Dog")) {
                 RoboticDog roboticDog = (RoboticDog) virtualPet;
                 String dogName = roboticDog.petName;
-                String dogOilLevel = Integer.toString(roboticDog.oilLevel);
-                String dogMaintenanceNeed = Integer.toString(roboticDog.maintenanceNeedLevel);
-                String dogBatteryLevel = Integer.toString(roboticDog.batteryLevel);
-                String dogHealthStat = Integer.toString(roboticDog.healthStat);
-                String dogHappinessStat = Integer.toString(roboticDog.happinessLevel);
+                String dogOilLevel = makeStatUniform(roboticDog.oilLevel);
+                String dogMaintenanceNeed = makeStatUniform(roboticDog.maintenanceNeedLevel);
+                String dogBatteryLevel = makeStatUniform(roboticDog.batteryLevel);
+                String dogHealthStat = makeStatUniform(roboticDog.healthStat);
+                String dogHappinessStat = makeStatUniform(roboticDog.happinessLevel);
+                String dogBoredomLevel = makeStatUniform(roboticDog.boredomLevel);
 
                 System.out.println();
                 System.out.print(dogName);
                 for (int i = 0; i < 13 - dogName.length(); i++) System.out.print(" ");
+                System.out.print("|  ");
+
+                System.out.print("Dog");
+                for (int i = 0; i < 6; i++) System.out.print(" ");
                 System.out.print("|  ");
 
                 System.out.print(dogOilLevel);
@@ -281,26 +701,37 @@ public class Application {
                 for (int i = 0; i < 5; i++) System.out.print(" ");
                 System.out.print("|  ");
 
+                System.out.print(dogBoredomLevel);
+                for (int i = 0; i < 6; i++) System.out.print(" ");
+                System.out.print("|  ");
+
                 System.out.print(dogMaintenanceNeed);
             }
         }
     }
 
-    /** This method prints a list of robotic cats and their stats. */
+    /** 
+     * This method prints a list of robotic cats and their stats.
+     */
     private static void listRoboticCatsStats() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Robotic Cat")) {
                 RoboticCat roboticCat = (RoboticCat) virtualPet;
                 String catName = roboticCat.petName;
-                String catOilLevel = Integer.toString(roboticCat.oilLevel);
-                String catMaintenanceNeed = Integer.toString(roboticCat.maintenanceNeedLevel);
-                String catBatteryLevel = Integer.toString(roboticCat.batteryLevel);
-                String catHealthStat = Integer.toString(roboticCat.healthStat);
-                String catHappinessStat = Integer.toString(roboticCat.happinessLevel);
+                String catOilLevel = makeStatUniform(roboticCat.oilLevel);
+                String catMaintenanceNeed = makeStatUniform(roboticCat.maintenanceNeedLevel);
+                String catBatteryLevel = makeStatUniform(roboticCat.batteryLevel);
+                String catHealthStat = makeStatUniform(roboticCat.healthStat);
+                String catHappinessStat = makeStatUniform(roboticCat.happinessLevel);
+                String catBoredomStat = makeStatUniform(roboticCat.boredomLevel);
 
                 System.out.println();
                 System.out.print(catName);
                 for (int i = 0; i < 13 - catName.length(); i++) System.out.print(" ");
+                System.out.print("|  ");
+
+                System.out.print("Cat");
+                for (int i = 0; i < 6; i++) System.out.print(" ");
                 System.out.print("|  ");
 
                 System.out.print(catOilLevel);
@@ -319,37 +750,46 @@ public class Application {
                 for (int i = 0; i < 5; i++) System.out.print(" ");
                 System.out.print("|  ");
 
+                System.out.print(catBoredomStat);
+                for (int i = 0; i < 6; i++) System.out.print(" ");
+                System.out.print("|  ");
+
+
                 System.out.print(catMaintenanceNeed);
             }
         }
         
     }
 
-    /** This method prints a header for the list of robotic pets. */
+    /** 
+     * This method prints a header for the list of robotic pets.
+     */
     private static void printRoboticPetListHeader() {
         System.out.print("Robotic Pet  |  ");
-        // 13 long
+        System.out.print("Species  |  ");
         System.out.print("Oil Level  | ");
-        // 17 long
         System.out.print("Happiness | ");
-        // 17
         System.out.print("Battery Level |  ");
-        // 9
         System.out.print("Health  |  ");
+        System.out.print("Boredom  |  ");
         System.out.print("Maintenance Need");
 
         System.out.println();
-        for (int i = 0; i < 88; i++) System.out.print("-");
+        for (int i = 0; i < 110; i++) System.out.print("-");
     }
 
-    /** This method prints a list of all organic pets underneath a header. */
+    /** 
+     * This method prints a list of all organic pets underneath a header.
+     */
     private static void listAllOrganicPetsStats() {
         printOrganicPetsListHeader();
         listOrganicDogsStats();
         listOrganicCatsStats();
     }
 
-    /** This method prints a list of organic cats and their stats. */
+    /** 
+     * This method prints a list of organic cats and their stats.
+     */
     private static void listOrganicCatsStats() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Cat")) {
@@ -366,6 +806,10 @@ public class Application {
                 String catName = organicCat.petName;
                 System.out.print(catName);
                 for (int i = 0; i < 13 - catName.length(); i++) System.out.print(" ");
+                System.out.print("|  ");
+
+                System.out.print("Cat");
+                for (int i = 0; i < 6; i++) System.out.print(" ");
                 System.out.print("|  ");
 
                 System.out.print(catHealthStatString);
@@ -404,7 +848,9 @@ public class Application {
         else return Integer.toString(petStat);
     }
 
-    /** This method prints a list of organic dogs and their stats. */
+    /** 
+     * This method prints a list of organic dogs and their stats.
+     */
     private static void listOrganicDogsStats() {
         for (VirtualPet virtualPet : virtualPetsInShelter) {
             if (virtualPet.returnType().equals("Organic Dog")) {
@@ -421,6 +867,10 @@ public class Application {
                 String dogName = organicDog.petName;
                 System.out.print(dogName);
                 for (int i = 0; i < 13 - dogName.length(); i++) System.out.print(" ");
+                System.out.print("|  ");
+
+                System.out.print("Dog");
+                for (int i = 0; i < 6; i++) System.out.print(" ");
                 System.out.print("|  ");
 
                 System.out.print(dogHealthStatString);
@@ -448,9 +898,15 @@ public class Application {
         }
     }
 
-    /** This method prints a header for the list of robotic pets. */
+    /** 
+     * This method prints a header for the list of robotic pets.
+     */
     private static void printOrganicPetsListHeader() {
         System.out.print("Organic Pet  ");
+        System.out.print("|  ");
+
+        System.out.print("Species");
+        for (int i = 0; i < 2; i++) System.out.print(" ");
         System.out.print("|  ");
 
         System.out.print("Health");
@@ -476,6 +932,6 @@ public class Application {
         System.out.print("Happiness");
 
         System.out.println();
-        for (int i = 0; i < 85; i++) System.out.print("-");
+        for (int i = 0; i < 98; i++) System.out.print("-");
     }
 }

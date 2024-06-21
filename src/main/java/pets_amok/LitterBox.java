@@ -18,6 +18,6 @@ public class LitterBox {
     private int wasteLevel;
 
     /** This instance variable represents whether or not the litter box is upright */
-    private boolean isUpright;
+    private boolean isUpright = true;
 
 }

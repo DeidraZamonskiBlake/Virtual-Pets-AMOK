@@ -1,5 +1,7 @@
 package pets_amok;
 
+import java.util.Random;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,8 +39,7 @@ public class RoboticDog extends RoboticPet implements Dog {
 
     /** This method is implemented from the Dog interface and it raises the happiness of the robotic dog to signify that the dog has been walked */
     @Override
-    public boolean walkDog() {
+    public void walkDog() {
         this.happinessLevel += 60;
-        return true;
     }
 }

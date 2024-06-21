@@ -56,8 +56,7 @@ public class Application {
         System.out.println();
         scanner.close();
 
-        // update jocdoc so that methods have multiline comments
-
+        // update javadoc so that methods have multiline comments
     }
 
     /**

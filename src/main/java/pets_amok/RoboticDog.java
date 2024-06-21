@@ -1,7 +1,5 @@
 package pets_amok;
 
-import java.util.Random;
-
 import lombok.Getter;
 import lombok.Setter;
 

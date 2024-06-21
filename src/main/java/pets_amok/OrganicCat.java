@@ -78,6 +78,7 @@ public class OrganicCat extends OrganicPet implements Cat{
     @Override
     public void purr() {
         this.happinessLevel += 10;
+        if (this.happinessLevel > 100) this.happinessLevel = 100;
     }
 
     /** 
@@ -86,6 +87,7 @@ public class OrganicCat extends OrganicPet implements Cat{
     @Override
     public void hiss() {
         this.happinessLevel -= 10;
+        if (this.happinessLevel < 0) this.happinessLevel = 0;
     }
 
     /**

@@ -56,7 +56,6 @@ public class Application {
         System.out.println();
         scanner.close();
 
-        // update javadoc so that methods have multiline comments
     }
 
     /**
@@ -94,11 +93,10 @@ public class Application {
      * This method prints a list of dead pets, if there are any, and their cause of death.
      */
     private static void printIfAnyPetsDied() {
-        System.out.println();
         if (deadPets.size() > 0) {
             for (VirtualPet deadPet : deadPets) System.out.println(deadPet.petName + " has died from " + deadPet.getCauseOfDeath() + "!");
+            System.out.println();
         }
-        System.out.println();
     }
 
     /**
